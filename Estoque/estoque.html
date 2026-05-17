@@ -1,24 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
-<script src="estoque.js"></script>
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Estoque</title>
+  <link rel="stylesheet" href="estoque.css">
 </head>
 
 <body>
 
   <h2>Meu Estoque</h2>
 
-  <input type="text" id="produto" placeholder="Produto">
-  <input type="number" id="quantidade" placeholder="Quantidade">
-  <button onclick="addProduto()">Adicionar</button>
+  <!-- FORMULÁRIO DE NOVO PRODUTO -->
+  <div class="form-produto">
+    <input type="text" id="produto" placeholder="Produto">
+    <input type="number" id="quantidade" placeholder="Quantidade">
+    <input type="text" id="codigo" placeholder="Código de barras">
+    <input type="number" id="compra" placeholder="Valor de compra">
+    <input type="number" id="venda" placeholder="Valor de venda">
+    <input type="number" id="min_stock" placeholder="Estoque mínimo">
 
-  <ul id="lista"></ul>
+    <button onclick="addProduto()">Adicionar</button>
+  </div>
 
+  <!-- CAMPO DE PESQUISA -->
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Pesquisar produto" onkeyup="pesquisar()">
+  </div>
+
+  <button class="btn-venda" onclick="abrirVendaPopup()">Realizar Venda</button>
+
+  <!-- LISTA -->
+  <div id="lista" class="container-produtos"></div>
+
+  <!-- POPUP DE VENDA -->
+  <div id="venda-popup" class="popup-overlay" style="display:none">
+    <div class="popup-card">
+      <div class="popup-header">
+        <h3>Venda de Produtos</h3>
+        <button class="close-popup" onclick="fecharVendaPopup()">×</button>
+      </div>
+
+      <div class="popup-body">
+        <div class="popup-search">
+          <input type="text" id="search-venda" placeholder="Pesquisar produto para venda" onkeyup="renderVendaSearch()">
+        </div>
+
+        <div class="popup-columns">
+          <div class="popup-column">
+            <h4>Produtos disponíveis</h4>
+            <div id="venda-lista"></div>
+          </div>
+
+          <div class="popup-column">
+            <h4>Fila de compras</h4>
+            <div id="fila-compra"></div>
+            <p class="total-venda">Total: R$ <span id="total-venda">0.00</span></p>
+            <button class="btn-finalizar" onclick="finalizarVenda()">Finalizar Venda</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="estoque.js"></script>
 
 </body>
-
 </html>

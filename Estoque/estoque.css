@@ -1,0 +1,91 @@
+/* ================= LAYOUT DE PRODUTOS ================= */
+.container-produtos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.produto {
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+  padding: 12px;
+  width: 220px;
+  box-sizing: border-box;
+}
+
+.low-stock {
+  background: #ffdddd;
+  border-color: #d46b6b;
+}
+
+input {
+  display: block;
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.form-produto {
+  margin-bottom: 16px;
+}
+
+.search-container {
+  margin-bottom: 16px;
+}
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.popup-card {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 16px;
+  width: min(100%, 760px);
+  max-height: 90vh;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.close-popup {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.popup-columns {
+  display: flex;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+
+.popup-column {
+  flex: 1 1 48%;
+  min-width: 240px;
+}
+
+.popup-columns > .popup-column:first-child {
+  border-right: 1px solid #ddd;
+  padding-right: 12px;
+}
+
+.popup-columns > .popup-column:last-child {
+  padding-left: 12px;
+}
+

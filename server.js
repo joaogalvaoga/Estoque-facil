@@ -37,9 +37,13 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome_produto TEXT,
       quantidade INTEGER,
+      codigo_barras TEXT,
+      valor_compra REAL,
+      valor_venda REAL,
+      min_stock INTEGER,
       group_id INTEGER,
-      UNIQUE(nome_produto, group_id) -- Impede duplicidade de produtos por grupo
-    )
+      UNIQUE(nome_produto, group_id)
+);
   `);
 
   // ================= INSERÇÃO DE USUÁRIO PADRÃO =================
@@ -105,35 +109,43 @@ app.get("/estoque/:userGP", (req, res) => {
 // ================= ROTA PARA ADICIONAR PRODUTO =================
 app.post("/estoque", (req, res) => {
 
-  // Obtém dados enviados pelo cliente
-  const { nome, quantidade, userGP } = req.body;
+  const { 
+    nome, 
+    quantidade, 
+    userGP, 
+    codigo_barras, 
+    valor_compra, 
+    valor_venda,
+    min_stock
+  } = req.body;
 
   console.log("Dados recebidos:", req.body);
 
-  // Verifica se o produto já existe para o grupo informado
   db.get(
     "SELECT * FROM estoque WHERE nome_produto = ? AND group_id = ?",
     [nome, userGP],
     (err, row) => {
 
-      // Tratamento de erro
       if (err) {
-        console.error("Erro ao consultar produto:", err);
+        console.error(err);
         return res.json({ success: false });
       }
 
-      // Caso o produto já exista, atualiza a quantidade
       if (row) {
-
         const novaQuantidade = row.quantidade + Number(quantidade);
 
         db.run(
-          "UPDATE estoque SET quantidade = ? WHERE id = ?",
-          [novaQuantidade, row.id],
+          `UPDATE estoque 
+           SET quantidade = ?, 
+               codigo_barras = ?, 
+               valor_compra = ?, 
+               valor_venda = ?,
+               min_stock = ?
+           WHERE id = ?`,
+          [novaQuantidade, codigo_barras, valor_compra, valor_venda, min_stock, row.id],
           (err) => {
-
             if (err) {
-              console.error("Erro ao atualizar produto:", err);
+              console.error(err);
               return res.json({ success: false });
             }
 
@@ -142,15 +154,16 @@ app.post("/estoque", (req, res) => {
         );
 
       } else {
-        // Caso o produto não exista, realiza inserção
 
         db.run(
-          "INSERT INTO estoque (nome_produto, quantidade, group_id) VALUES (?, ?, ?)",
-          [nome, quantidade, userGP],
+          `INSERT INTO estoque 
+           (nome_produto, quantidade, codigo_barras, valor_compra, valor_venda, min_stock, group_id) 
+           VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          [nome, quantidade, codigo_barras, valor_compra, valor_venda, min_stock, userGP],
           (err) => {
 
             if (err) {
-              console.error("Erro ao inserir produto:", err);
+              console.error(err);
               return res.json({ success: false });
             }
 
@@ -158,6 +171,54 @@ app.post("/estoque", (req, res) => {
           }
         );
       }
+    }
+  );
+});
+
+// ================= ROTA PARA REMOVER PRODUTO =================
+app.delete("/estoque/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.run("DELETE FROM estoque WHERE id = ?", [id], (err) => {
+    if (err) {
+      console.error(err);
+      return res.json({ success: false });
+    }
+
+    res.json({ success: true });
+  });
+});
+
+// ================= EDITAR PRODUTO =================
+app.put("/estoque/:id", (req, res) => {
+  const id = req.params.id;
+
+  const {
+    nome,
+    quantidade,
+    codigo_barras,
+    valor_compra,
+    valor_venda,
+    min_stock
+  } = req.body;
+
+  db.run(
+    `UPDATE estoque 
+     SET nome_produto = ?, 
+         quantidade = ?, 
+         codigo_barras = ?, 
+         valor_compra = ?, 
+         valor_venda = ?,
+         min_stock = ?
+     WHERE id = ?`,
+    [nome, quantidade, codigo_barras, valor_compra, valor_venda, min_stock, id],
+    (err) => {
+      if (err) {
+        console.error(err);
+        return res.json({ success: false });
+      }
+
+      res.json({ success: true });
     }
   );
 });
