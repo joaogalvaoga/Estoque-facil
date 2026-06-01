@@ -1,8 +1,91 @@
-/* Este CSS é um placeholder para colocar o texto da pagina de login no centro */
+/* Estilo laranja para o login do Estoque Fácil */
+
+:root {
+  color-scheme: light;
+  --orange: #ff7f2a;
+  --orange-dark: #d95b11;
+  --orange-soft: #ffe4d4;
+  --gray: #4a4a4a;
+  --border: #f2b187;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at top left, #ffe7d0 0%, #ffd1a8 40%, #fff9f2 100%);
+  color: var(--gray);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
 
 #login {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: min(100%, 380px);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 32px 28px;
+  box-shadow: 0 18px 40px rgba(255, 127, 42, 0.16);
+  text-align: center;
+}
+
+#login h1 {
+  margin: 0 0 24px;
+  font-size: 2rem;
+  letter-spacing: -0.04em;
+  color: var(--orange-dark);
+}
+
+#login input {
+  width: 100%;
+  padding: 14px 16px;
+  margin: 0 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  background: #fff8f2;
+}
+
+#login input:focus {
+  outline: none;
+  border-color: var(--orange);
+  background: #fff2e5;
+}
+
+#login button {
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 14px;
+  background: var(--orange);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 12px 24px rgba(255, 127, 42, 0.22);
+}
+
+#login button:hover {
+  background: var(--orange-dark);
+  transform: translateY(-1px);
+}
+
+#login button:active {
+  transform: translateY(0);
+}
+
+#login p {
+  height: 0;
+  margin: 0 0 16px;
+}
+
+::placeholder {
+  color: #b56e47;
 }
