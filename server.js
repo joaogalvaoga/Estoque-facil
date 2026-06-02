@@ -6,6 +6,12 @@ const cors = require("cors");
 
 // ================= CONFIGURAÇÃO DO SERVIDOR =================
 const app = express();
+ 
+app.use(express.static(__dirname));
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/Login/login.html");
+});
 
 // Habilita CORS para permitir requisições externas
 app.use(cors());

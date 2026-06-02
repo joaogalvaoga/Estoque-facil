@@ -1,9 +1,8 @@
-/* ================= LAYOUT DE PRODUTOS ================= */
+﻿/* ================= LAYOUT DE PRODUTOS ================= */
 :root {
   --orange: #ff7f2a;
   --orange-soft: #fff0e5;
   --orange-muted: #ffb77a;
-  --orange-dark: #d95b11;
   --text: #333333;
   --border: #f2b287;
   --surface: #fff8f4;
@@ -44,21 +43,63 @@ body {
   border-color: #f3a28a;
 }
 
+/* ================= MODO DE EDIÇÃO ================= */
+.edit-mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.edit-mode input {
+  margin: 0;
+  padding: 7px 9px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #fff7f1;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.edit-mode input:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 1px rgba(255, 127, 42, 0.2);
+}
+
+.edit-mode button {
+  grid-column: 1 / -1;
+  padding: 8px 12px;
+  font-size: 12px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-mode button:last-child {
+  margin-bottom: 0;
+}
+
 input {
   display: block;
   width: 100%;
-  padding: 10px 12px;
-  margin-bottom: 12px;
+  padding: 8px 10px;
+  margin: 0 0 12px 0;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: #fff7f1;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-family: inherit;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 input:focus {
   outline: none;
   border-color: var(--orange);
-  box-shadow: 0 0 0 4px rgba(255, 127, 42, 0.12);
+  box-shadow: 0 0 0 2px rgba(255, 127, 42, 0.1);
 }
 
 .form-produto {
@@ -71,6 +112,24 @@ input:focus {
 
 .search-container {
   margin-bottom: 20px;
+}
+
+.btn-venda {
+  background: var(--orange);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-venda:hover {
+  background: #d95b11;
 }
 
 button,
@@ -87,7 +146,7 @@ input[type="submit"] {
 
 button:hover,
 input[type="submit"]:hover {
-  background: var(--orange-dark);
+  background: #d95b11;
   transform: translateY(-1px);
 }
 
@@ -126,26 +185,279 @@ input[type="submit"]:hover {
   border: none;
   font-size: 22px;
   cursor: pointer;
-  color: var(--orange-dark);
+  color: var(--orange);
 }
 
-.popup-columns {
+/* ================= LAYOUT DE VENDA ================= */
+.venda-card {
+  width: min(100%, 1200px);
+  max-height: 85vh;
+}
+
+.venda-body {
   display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
 }
 
-.popup-column {
-  flex: 1 1 48%;
-  min-width: 240px;
+.venda-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
-.popup-columns > .popup-column:first-child {
-  border-right: 1px solid #f1d0ba;
-  padding-right: 14px;
+.venda-section {
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  padding: 20px;
+  overflow: hidden;
 }
 
-.popup-columns > .popup-column:last-child {
-  padding-left: 14px;
+.items-disponiveis {
+  background: #fff9f6;
+  border-right: 2px solid var(--border);
 }
+
+.items-selecionados {
+  background: #fff5f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--orange);
+}
+
+.section-header h3 {
+  margin: 0;
+  color: var(--orange);
+  font-size: 16px;
+}
+
+.popup-search {
+  margin-bottom: 12px;
+}
+
+.popup-search input {
+  margin: 0;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.items-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.items-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.items-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.items-list::-webkit-scrollbar-thumb {
+  background: var(--orange-muted);
+  border-radius: 3px;
+}
+
+.venda-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 2px solid var(--border);
+}
+
+.total-venda {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--orange);
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+.btn-finalizar {
+  width: 100%;
+  background: var(--orange);
+  color: white;
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+/* ================= ITENS DA LISTA DE VENDA ================= */
+.popup-list-item {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.popup-list-item:hover {
+  background: #fffbf8;
+  border-color: var(--orange);
+  box-shadow: 0 4px 12px rgba(255, 127, 42, 0.15);
+}
+
+.popup-list-item > div:first-child {
+  flex: 1;
+}
+
+.popup-list-item strong {
+  display: block;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.popup-list-item p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.venda-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.venda-actions input[type="number"] {
+  width: 60px;
+  margin: 0;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff7f1;
+}
+
+.venda-actions button {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+/* ================= ITENS DA FILA DE COMPRA ================= */
+.fila-item {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.fila-item:hover {
+  background: #fffbf8;
+  border-color: var(--orange);
+  box-shadow: 0 4px 12px rgba(255, 127, 42, 0.15);
+}
+
+.fila-item > div {
+  flex: 1;
+}
+
+.fila-item strong {
+  display: block;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.fila-item p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.fila-item button {
+  padding: 6px 12px;
+  font-size: 12px;
+  background: #ff6b5b;
+  border-radius: 8px;
+}
+
+.fila-item button:hover {
+  background: #ff4444;
+}
+
+/* ================= MENSAGEM VAZIA ================= */
+.empty {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 20px 10px;
+  margin: 0;
+}
+
+/* ================= RESPONSIVIDADE ================= */
+@media (max-width: 1024px) {
+  .venda-container {
+    grid-template-columns: 1fr;
+  }
+
+  .items-disponiveis {
+    border-right: none;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .venda-section {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .venda-card {
+    width: 100%;
+    max-height: 90vh;
+  }
+
+  .venda-section {
+    height: 350px;
+    padding: 16px;
+  }
+
+  .section-header h3 {
+    font-size: 14px;
+  }
+
+  .popup-list-item,
+  .fila-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .venda-actions {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .venda-actions input[type="number"] {
+    flex: 1;
+  }
+
+  .venda-actions button {
+    flex: 1;
+  }
+
+  .total-venda {
+    font-size: 16px;
+  }
+}
+
 
