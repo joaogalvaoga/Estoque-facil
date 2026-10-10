@@ -15,6 +15,41 @@ body {
   color: var(--text);
 }
 
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 248, 244, 0.96);
+  border-bottom: 1px solid rgba(242, 178, 135, 0.65);
+  backdrop-filter: blur(12px);
+}
+
+.header-content,
+.app-main {
+  width: min(100% - 40px, 1200px);
+  margin-inline: auto;
+}
+
+.header-content {
+  min-height: 76px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-content h1 {
+  margin: 0;
+  color: #713c24;
+  font-size: 24px;
+}
+
+.app-main {
+  display: grid;
+  gap: 18px;
+  padding-block: 24px 48px;
+}
+
 .container-produtos {
   display: flex;
   flex-wrap: wrap;
@@ -103,15 +138,89 @@ input:focus {
 }
 
 .form-produto {
-  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 0;
   padding: 18px;
   background: rgba(255, 153, 72, 0.08);
   border: 1px solid rgba(242, 178, 135, 0.55);
-  border-radius: 18px;
+  border-radius: 14px;
+}
+
+.form-title,
+.form-produto > button {
+  grid-column: 1 / -1;
+}
+
+.form-title h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.form-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.form-title::-webkit-details-marker {
+  display: none;
+}
+
+.form-title::after {
+  content: "+";
+  color: var(--orange);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.form-produto[open] .form-title::after {
+  content: "\2212";
+}
+
+.form-field {
+  display: block;
+  min-width: 0;
+  color: #704c3b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-produto input {
+  margin: 6px 0 0;
+}
+
+.form-produto > button {
+  min-height: 44px;
 }
 
 .search-container {
-  margin-bottom: 20px;
+  margin-bottom: 0;
+}
+
+.search-container {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.search-container input {
+  min-width: 0;
+  max-width: 520px;
+  margin: 0;
+}
+
+.btn-camera {
+  display: none;
+  flex: 0 0 48px;
+  min-height: 48px;
+  padding: 8px;
+  border-radius: 12px;
+  font-size: 21px;
 }
 
 .btn-venda {
@@ -122,10 +231,8 @@ input:focus {
   padding: 12px 18px;
   cursor: pointer;
   font-weight: 700;
-  margin-bottom: 20px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0;
+  min-height: 44px;
 }
 
 .btn-venda:hover {
@@ -171,6 +278,55 @@ input[type="submit"]:hover {
   box-sizing: border-box;
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.scanner-card {
+  width: min(100%, 520px);
+}
+
+.barcode-reader {
+  width: 100%;
+  min-height: 180px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #171717;
+}
+
+.barcode-reader video {
+  width: 100%;
+  max-height: 48vh;
+  object-fit: cover;
+}
+
+.scanner-status {
+  min-height: 24px;
+  margin: 12px 0;
+  color: #704c3b;
+  font-size: 14px;
+}
+
+.scan-photo-btn {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--border);
+  background: var(--orange-soft);
+  color: #713c24;
+}
+
+.scan-photo-btn:hover {
+  background: #ffe1cc;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .popup-header {
@@ -290,6 +446,7 @@ input[type="submit"]:hover {
   color: white;
   font-weight: 700;
   padding: 12px;
+  min-height: 44px;
   border-radius: 10px;
 }
 
@@ -457,6 +614,190 @@ input[type="submit"]:hover {
 
   .total-venda {
     font-size: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    background: #fff9f5;
+  }
+
+  .header-content,
+  .app-main {
+    width: calc(100% - 28px);
+  }
+
+  .header-content {
+    min-height: 68px;
+    gap: 10px;
+  }
+
+  .header-content h1 {
+    font-size: 21px;
+  }
+
+  .header-content .btn-venda {
+    min-height: 44px;
+    padding: 10px 12px;
+    border-radius: 11px;
+    white-space: nowrap;
+  }
+
+  .app-main {
+    gap: 14px;
+    padding-block: 14px 32px;
+  }
+
+  .form-produto {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .form-title h2 {
+    font-size: 17px;
+  }
+
+  .form-field-name,
+  .form-field-code {
+    grid-column: 1 / -1;
+  }
+
+  .form-field {
+    font-size: 12px;
+  }
+
+  input {
+    min-height: 46px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    font-size: 16px;
+  }
+
+  .form-produto > button {
+    min-height: 48px;
+    border-radius: 11px;
+  }
+
+  .search-container input {
+    min-height: 48px;
+    margin: 0;
+  }
+
+  .search-container {
+    width: 100%;
+  }
+
+  .btn-camera {
+    display: block;
+  }
+
+  .container-produtos {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    justify-content: stretch;
+    padding: 0;
+  }
+
+  .produto {
+    width: 100%;
+    padding: 15px;
+    border-radius: 14px;
+    box-shadow: 0 5px 16px rgba(92, 58, 38, 0.08);
+  }
+
+  .produto .view-mode {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px 12px;
+  }
+
+  .produto .view-mode h3 {
+    grid-column: 1 / -1;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .produto .view-mode p {
+    margin: 0;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+
+  .produto .view-mode button {
+    min-height: 44px;
+    margin-top: 4px;
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+
+  .popup-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .venda-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 94vh;
+    height: 94dvh;
+    max-height: 94dvh;
+    padding: 14px 12px calc(12px + env(safe-area-inset-bottom));
+    border-radius: 18px 18px 0 0;
+  }
+
+  .venda-card > .popup-header {
+    flex: 0 0 auto;
+  }
+
+  .venda-body {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .venda-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .venda-section {
+    flex: 1 0 240px;
+    min-height: 240px;
+    height: auto;
+    padding: 12px 8px;
+  }
+
+  .items-list {
+    min-height: 0;
+  }
+
+  .popup-list-item,
+  .fila-item {
+    gap: 8px;
+  }
+
+  .venda-actions button,
+  .fila-item button {
+    min-height: 44px;
+  }
+
+  .scanner-overlay {
+    align-items: center;
+    padding: 14px;
+  }
+
+  .scanner-card {
+    width: 100%;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .barcode-reader {
+    min-height: 200px;
   }
 }
 

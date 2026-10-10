@@ -230,6 +230,8 @@ app.put("/estoque/:id", (req, res) => {
 });
 
 // ================= INICIALIZAÇÃO DO SERVIDOR =================
-app.listen(3000, () => {
-  console.log("Servidor em execução: http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Servidor em execução na porta ${PORT}`);
 });

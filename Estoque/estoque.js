@@ -18,10 +18,22 @@ if (!userGP) {
 // Armazena os dados de estoque e a fila de produtos a serem vendidos
 let estoqueData = [];
 let filaCompra = [];
+let barcodeScanner = null;
+let barcodeResultHandled = false;
+
+const formatosCodigoBarras = [
+  Html5QrcodeSupportedFormats.EAN_13,
+  Html5QrcodeSupportedFormats.EAN_8,
+  Html5QrcodeSupportedFormats.UPC_A,
+  Html5QrcodeSupportedFormats.UPC_E,
+  Html5QrcodeSupportedFormats.CODE_128,
+  Html5QrcodeSupportedFormats.CODE_39,
+  Html5QrcodeSupportedFormats.ITF
+];
 
 // ================= FUNÇÃO PARA CARREGAR ESTOQUE =================
 function carregarEstoque() {
-  fetch(`http://localhost:3000/estoque/${userGP}`)
+  fetch(`/estoque/${userGP}`)
     .then(res => res.json())
     .then(data => {
       estoqueData = data || [];
@@ -79,7 +91,7 @@ function addProduto() {
   const venda = document.getElementById("venda").value;
   const min_stock = document.getElementById("min_stock").value;
 
-  fetch("http://localhost:3000/estoque", {
+  fetch("/estoque", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -119,7 +131,7 @@ function salvarEdicao(id) {
   const venda = document.getElementById(`venda-${id}`).value;
   const min_stock = document.getElementById(`min-${id}`).value;
 
-  fetch(`http://localhost:3000/estoque/${id}`, {
+  fetch(`/estoque/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -148,6 +160,101 @@ function pesquisar() {
     const visible = nome.includes(query) || codigo.includes(query);
     prod.style.display = visible ? 'block' : 'none';
   });
+}
+
+// ================= LEITURA DE CÓDIGO PELA CÂMERA =================
+function abrirLeitorCodigo() {
+  const popup = document.getElementById('barcode-popup');
+  const status = document.getElementById('barcode-status');
+  const cameraDisponivel = window.isSecureContext && navigator.mediaDevices?.getUserMedia;
+
+  barcodeResultHandled = false;
+  popup.style.display = 'flex';
+
+  if (!cameraDisponivel) {
+    status.textContent = 'A leitura ao vivo exige HTTPS. Tire uma foto nítida do código para pesquisar.';
+    selecionarImagemCodigo();
+    return;
+  }
+
+  iniciarLeituraAoVivo();
+}
+
+async function iniciarLeituraAoVivo() {
+  const status = document.getElementById('barcode-status');
+  status.textContent = 'Solicitando acesso à câmera...';
+  barcodeScanner = new Html5Qrcode('barcode-reader', {
+    formatsToSupport: formatosCodigoBarras,
+    verbose: false
+  });
+
+  try {
+    await barcodeScanner.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 260, height: 120 }, aspectRatio: 1.8 },
+      codigo => receberCodigoLido(codigo),
+      () => {}
+    );
+    status.textContent = 'Aponte a câmera para o código de barras.';
+  } catch (error) {
+    console.error('Não foi possível iniciar a câmera:', error);
+    status.textContent = 'Não foi possível abrir a câmera. Permita o acesso ou use a opção de foto.';
+  }
+}
+
+function selecionarImagemCodigo() {
+  document.getElementById('barcode-image').click();
+}
+
+async function lerCodigoDaImagem(event) {
+  const imagem = event.target.files[0];
+  if (!imagem) return;
+
+  const status = document.getElementById('barcode-status');
+  status.textContent = 'Lendo código da imagem...';
+  barcodeScanner = new Html5Qrcode('barcode-reader', {
+    formatsToSupport: formatosCodigoBarras,
+    verbose: false
+  });
+
+  try {
+    const codigo = await barcodeScanner.scanFile(imagem, false);
+    await receberCodigoLido(codigo);
+  } catch (error) {
+    console.error('Não foi possível ler o código da imagem:', error);
+    status.textContent = 'Código não encontrado. Tente outra foto, com boa luz e o código focado.';
+  } finally {
+    event.target.value = '';
+  }
+}
+
+async function receberCodigoLido(codigo) {
+  if (barcodeResultHandled) return;
+  barcodeResultHandled = true;
+
+  await fecharLeitorCodigo();
+  const campoBusca = document.getElementById('search');
+  campoBusca.value = codigo;
+  pesquisar();
+  campoBusca.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+async function fecharLeitorCodigo() {
+  if (barcodeScanner) {
+    try {
+      if (barcodeScanner.isScanning) await barcodeScanner.stop();
+    } catch (error) {
+      console.warn('A câmera já estava parada:', error);
+    }
+    try {
+      barcodeScanner.clear();
+    } catch (error) {
+      console.warn('Não foi possível limpar o leitor:', error);
+    }
+    barcodeScanner = null;
+  }
+
+  document.getElementById('barcode-popup').style.display = 'none';
 }
 
 // ================= POPUP DE VENDA =================
@@ -306,7 +413,7 @@ function finalizarVenda() {
     const quantidadeAtual = Number(produto.quantidade) || 0;
     const novaQuantidade = quantidadeAtual - Number(item.quantidade);
 
-    return fetch(`http://localhost:3000/estoque/${item.id}`, {
+    return fetch(`/estoque/${item.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -337,7 +444,7 @@ function finalizarVenda() {
 
 // ================= FUNÇÃO DE REMOVER PRODUTO ================= 
 function removerProduto(id) {
-  fetch(`http://localhost:3000/estoque/${id}`, {
+  fetch(`/estoque/${id}`, {
     method: "DELETE"
   })
   .then(() => carregarEstoque());

@@ -4,6 +4,7 @@
   "description": "��#\u0000 \u0000E\u0000s\u0000t\u0000o\u0000q\u0000u\u0000e\u0000-\u0000f\u0000a\u0000c\u0000i\u0000l\u0000\r\u0000 \u0000",
   "main": "app.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +22,10 @@
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "html5-qrcode": "^2.3.8",
     "sqlite3": "^6.0.1"
+  },
+  "allowScripts": {
+    "sqlite3@6.0.1": true
   }
 }

@@ -3,35 +3,73 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Estoque</title>
   <link rel="stylesheet" href="estoque.css">
 </head>
 
 <body>
+  <header class="app-header">
+    <div class="header-content">
+      <h1>Meu Estoque</h1>
+      <button class="btn-venda" onclick="abrirVendaPopup()">Realizar venda</button>
+    </div>
+  </header>
 
-  <h2>Meu Estoque</h2>
+  <main class="app-main">
+    <details class="form-produto">
+      <summary class="form-title">
+        <h2 id="novo-produto-titulo">Novo produto</h2>
+      </summary>
 
-  <!-- FORMULÁRIO DE NOVO PRODUTO -->
-  <div class="form-produto">
-    <input type="text" id="produto" placeholder="Produto">
-    <input type="number" id="quantidade" placeholder="Quantidade">
-    <input type="text" id="codigo" placeholder="Código de barras">
-    <input type="number" id="compra" placeholder="Valor de compra">
-    <input type="number" id="venda" placeholder="Valor de venda">
-    <input type="number" id="min_stock" placeholder="Estoque mínimo">
+      <label class="form-field form-field-name" for="produto">
+        Produto
+        <input type="text" id="produto" placeholder="Nome do produto">
+      </label>
+      <label class="form-field" for="quantidade">
+        Quantidade
+        <input type="number" id="quantidade" placeholder="0" inputmode="numeric">
+      </label>
+      <label class="form-field form-field-code" for="codigo">
+        Código de barras
+        <input type="text" id="codigo" placeholder="Código de barras" inputmode="numeric">
+      </label>
+      <label class="form-field" for="compra">
+        Valor de compra
+        <input type="number" id="compra" placeholder="0,00" inputmode="decimal">
+      </label>
+      <label class="form-field" for="venda">
+        Valor de venda
+        <input type="number" id="venda" placeholder="0,00" inputmode="decimal">
+      </label>
+      <label class="form-field" for="min_stock">
+        Estoque mínimo
+        <input type="number" id="min_stock" placeholder="0" inputmode="numeric">
+      </label>
 
-    <button onclick="addProduto()">Adicionar</button>
+      <button class="btn-adicionar" onclick="addProduto()">Adicionar produto</button>
+    </details>
+
+    <div class="search-container">
+      <input type="text" id="search" placeholder="Pesquisar por nome ou código" aria-label="Pesquisar produtos" onkeyup="pesquisar()">
+      <button type="button" class="btn-camera" onclick="abrirLeitorCodigo()" aria-label="Ler código de barras com a câmera" title="Ler código de barras com a câmera">📷</button>
+    </div>
+
+    <div id="lista" class="container-produtos"></div>
+  </main>
+
+  <div id="barcode-popup" class="popup-overlay scanner-overlay" style="display:none">
+    <section class="popup-card scanner-card" role="dialog" aria-modal="true" aria-labelledby="barcode-title">
+      <div class="popup-header">
+        <h3 id="barcode-title">Ler código de barras</h3>
+        <button type="button" class="close-popup" onclick="fecharLeitorCodigo()" aria-label="Fechar leitor">×</button>
+      </div>
+      <div id="barcode-reader" class="barcode-reader"></div>
+      <p id="barcode-status" class="scanner-status" role="status" aria-live="polite">Aponte a câmera para o código de barras.</p>
+      <button type="button" class="scan-photo-btn" onclick="selecionarImagemCodigo()">Tirar foto do código</button>
+      <input id="barcode-image" class="visually-hidden" type="file" accept="image/*" capture="environment" onchange="lerCodigoDaImagem(event)">
+    </section>
   </div>
-
-  <!-- CAMPO DE PESQUISA -->
-  <div class="search-container">
-    <input type="text" id="search" placeholder="Pesquisar produto" onkeyup="pesquisar()">
-  </div>
-
-  <button class="btn-venda" onclick="abrirVendaPopup()">Realizar Venda</button>
-
-  <!-- LISTA -->
-  <div id="lista" class="container-produtos"></div>
 
   <!-- POPUP DE VENDA -->
   <div id="venda-popup" class="popup-overlay" style="display:none">
@@ -70,6 +108,7 @@
     </div>
   </div>
 
+  <script src="/node_modules/html5-qrcode/html5-qrcode.min.js"></script>
   <script src="estoque.js"></script>
 
 </body>

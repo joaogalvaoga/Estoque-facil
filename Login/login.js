@@ -6,7 +6,7 @@ function login() {
   const pass = document.getElementById("pass").value;
 
   // Envia uma requisição HTTP para o backend com as credenciais
-  fetch("http://localhost:3000/login", {
+  fetch("/login", {
     method: "POST", // Define o método da requisição
     headers: {
       "Content-Type": "application/json" // Indica que o corpo da requisição está em formato JSON
